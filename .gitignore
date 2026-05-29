@@ -1,0 +1,17 @@
+# Secrets — never commit
+.env
+**/.env
+*.key
+*secret*
+
+# Runtime / build artifacts
+*.log
+*.db
+__pycache__/
+*.py[cod]
+
+# Local editor / agent config
+.claude/
+.idea/
+.vscode/
+.DS_Store

@@ -1,0 +1,31 @@
+# ================================================================
+#  VULN LAB (Web) - Target machine, web vulnerabilities only
+#  Vulns: SQLi, Stored XSS, File Upload RCE, Info Disclosure,
+#         AI prompt injection, LFI exfil, recent CVEs (port 80/443)
+# ================================================================
+
+services:
+
+  vuln-target:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vuln-target
+    hostname: vuln-lab.local
+    ports:
+      - "80:80"          # HTTP
+      - "443:443"        # HTTPS
+    environment:
+      # Loaded from .env (gitignored). Needed for the /ai.php prompt-injection lab.
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-2.5-flash}
+    volumes:
+      - vuln-logs:/var/log/vuln-lab
+      - nginx-logs:/var/log/nginx
+    restart: unless-stopped
+
+volumes:
+  vuln-logs:
+    driver: local
+  nginx-logs:
+    driver: local

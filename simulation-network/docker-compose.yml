@@ -1,0 +1,27 @@
+# ================================================================
+#  NETWORK EXPLOITATION LAB - single target, all 5 scenarios
+#  For testing Sangfor NGAF (IPS/IDS) detection capability.
+#  Deploy behind the firewall, attack from your Kali host/Metasploit.
+# ================================================================
+
+services:
+
+  net-target:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: net-target
+    hostname: net-lab.local
+    privileged: true
+    ports:
+      - "21:21"                      # FTP control (vsftpd 2.3.4)
+      - "20:20"                      # FTP data
+      - "21100-21110:21100-21110"    # FTP passive
+      - "6200:6200"                  # vsftpd backdoor shell
+      - "2222:22"                    # SSH (host 2222 -> avoid clashing host sshd)
+      - "161:161/udp"                # SNMP
+      - "3306:3306"                  # MySQL
+      - "61616:61616"                # ActiveMQ OpenWire (CVE-2023-46604)
+      - "8161:8161"                  # ActiveMQ web console
+      - "9001:9001"                  # c2-trigger implant (egress test, scenario #4)
+    restart: unless-stopped

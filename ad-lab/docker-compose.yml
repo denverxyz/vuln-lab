@@ -1,0 +1,31 @@
+# ================================================================
+#  AD LAB - Samba Active Directory DC (CORP.LOCAL / dc01)
+#  Intentionally weak. For testing Sangfor NGAF/IPS detection of
+#  AD attack traffic (Kerberoast, AS-REP, spray, DCSync, Zerologon).
+#  Isolated lab use only.
+# ================================================================
+
+services:
+
+  ad-target:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ad-target
+    hostname: dc01
+    privileged: true
+    environment:
+      - ADMIN_PASS=${ADMIN_PASS:-P@ssw0rd2024!}
+    ports:
+      - "88:88"                      # Kerberos (TCP)
+      - "88:88/udp"                  # Kerberos (UDP)
+      - "135:135"                    # RPC endpoint mapper
+      - "139:139"                    # NetBIOS session
+      - "389:389"                    # LDAP
+      - "445:445"                    # SMB
+      - "464:464"                    # kpasswd (TCP)
+      - "464:464/udp"                # kpasswd (UDP)
+      - "636:636"                    # LDAPS
+      - "3268:3268"                  # Global Catalog
+      - "49152-49180:49152-49180"    # pinned RPC range (DRSUAPI/Netlogon)
+    restart: unless-stopped

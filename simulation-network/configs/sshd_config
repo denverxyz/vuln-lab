@@ -1,0 +1,21 @@
+Port 22
+Protocol 2
+
+# Weak: root login + password auth (brute-force / recon target)
+PermitRootLogin yes
+PasswordAuthentication yes
+PubkeyAuthentication yes
+PermitEmptyPasswords no
+
+# No throttling
+MaxAuthTries 100
+MaxSessions 20
+LoginGraceTime 120
+
+LogLevel VERBOSE
+UsePAM yes
+X11Forwarding yes
+PrintMotd no
+
+AcceptEnv LANG LC_*
+Subsystem sftp /usr/lib/openssh/sftp-server
